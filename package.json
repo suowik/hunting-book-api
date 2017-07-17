@@ -19,6 +19,7 @@
   "homepage": "https://github.com/suowik/hunting-book-api#readme",
   "dependencies": {
     "express": "^4.15.3",
-    "mongodb": "^2.2.30"
+    "mongodb": "^2.2.30",
+    "redis": "^2.7.1"
   }
 }
