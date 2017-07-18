@@ -1,6 +1,7 @@
 let huntings = [
     {
         "id": "dsfsdf",
+        "userId": "kjbhbdghj",
         "status": "STARTED|FINISHED",
         "start": "",
         "end": "",

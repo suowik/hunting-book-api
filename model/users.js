@@ -5,11 +5,11 @@ let users = [
         "password": "",
         "name": "",
         "surname": "",
+        "role": "USER|ADMIN",
         "address": {
             "phone": "",
-            "strret": "",
+            "street": "",
             "city": ""
-        },
-        "huntings": ["32432fsda-fds", "43ktbhj4d"]
+        }
     }
 ];
