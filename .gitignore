@@ -5,3 +5,4 @@ node_modules
 .idea/modules.xml
 .idea/workspace.xml
 npm-debug.log
+/mongobox/.vagrant/

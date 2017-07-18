@@ -2,9 +2,9 @@
   "name": "hunting-book-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,8 +18,14 @@
   },
   "homepage": "https://github.com/suowik/hunting-book-api#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
     "mongodb": "^2.2.30",
+    "morgan": "^1.8.2",
     "redis": "^2.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
