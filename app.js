@@ -2,13 +2,17 @@ let app = require('./routes.js').app;
 
 let auth = require('./auth.js');
 
-class MockUserRepository {
-    findOne(name) {
-        return new Promise((resolve, reject) => {
-            resolve({password: 'abc', name: 'name'})
-        })
-    }
-}
 
-app(new MockUserRepository(), auth);
+let dbURI = process.env.MONGO_URI || 'mongodb://192.168.99.100:27017/hb2';
+let MongoClient = require('mongodb').MongoClient;
+let connection = MongoClient.connect(dbURI);
+
+
+let UserRepository = require('./users/UserRepository.js').UserRepository;
+
+let repositories = {
+    userRepository: new UserRepository(connection)
+};
+
+app(repositories, auth);
 
