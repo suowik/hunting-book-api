@@ -5,6 +5,9 @@ class CRUD {
     }
 
     create(entity) {
+        if (this.props.beforeInsert) {
+            entity = this.props.beforeInsert(entity)
+        }
         return this.exists(this.props.keyUniqueness(entity))
             .then((doc) => {
                 if (!doc) {
@@ -42,11 +45,22 @@ class CRUD {
         return this.mongo
             .then((db) => {
                 return new Promise((resolve, reject) => {
-                    db.collection(this.props.collection)
-                        .findOne(criteria, (err, doc) => {
+                    let partialQuery = db.collection(this.props.collection);
+                    if (this.props.lookupQuery) {
+                        this.props.lookupQuery(partialQuery).toArray((err, items) => {
                             if (err) reject(err);
+                            resolve(items.map(e => this.props.afterFind(e))[0])
+
+                        })
+                    } else {
+                        partialQuery.findOne(criteria, (err, doc) => {
+                            if (err) reject(err);
+                            if (this.props.afterFind) {
+                                resolve(this.props.afterFind(doc))
+                            }
                             resolve(doc);
-                        });
+                        })
+                    }
                 })
             })
     }
@@ -55,8 +69,12 @@ class CRUD {
         return this.mongo
             .then((db) => {
                 return new Promise((resolve, reject) => {
-                    let partialQuery = db.collection(this.props.collection)
-                        .find();
+                    let partialQuery = db.collection(this.props.collection);
+                    if (this.props.lookupQuery) {
+                        partialQuery = this.props.lookupQuery(partialQuery)
+                    } else {
+                        partialQuery = partialQuery.find()
+                    }
                     if (pagination) {
                         let page = (pagination.offset / pagination.limit);
                         partialQuery
@@ -65,6 +83,9 @@ class CRUD {
                     }
                     partialQuery.toArray((err, items) => {
                         if (err) reject(err);
+                        if (this.props.afterFind) {
+                            resolve(items.map(e => this.props.afterFind(e)))
+                        }
                         resolve(items)
                     })
                 })

@@ -44,7 +44,7 @@ class Endpoints {
         this.routes = this.registerRoute((router, repository) => {
             router.delete('/', (req, res) => {
                 let entity = req.body;
-                repository.remove(entity)
+                repository.remove({_id: new mongo.ObjectID(entity._id)})
                     .then(() => {
                         res.sendStatus(200)
                     })
