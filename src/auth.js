@@ -24,7 +24,7 @@ let authorizationFilter = (secret) => {
 let loginHandler = (secret, userRepository) => {
     return (req, res) => {
         userRepository
-            .findOne({name: req.body.name})
+            .find({login: req.body.login})
             .then((user) => {
                 if (!user) {
                     res.json({success: false, message: 'Authentication failed. User not found.'});
