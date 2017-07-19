@@ -12,13 +12,14 @@
     "url": "git+https://github.com/suowik/hunting-book-api.git"
   },
   "author": "suowik",
-  "license": "ISC",
+  "license": "BDSM",
   "bugs": {
     "url": "https://github.com/suowik/hunting-book-api/issues"
   },
   "homepage": "https://github.com/suowik/hunting-book-api#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "express": "^4.15.3",
     "jsonwebtoken": "^7.4.1",
     "mongodb": "^2.2.30",
