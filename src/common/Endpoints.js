@@ -1,3 +1,4 @@
+let mongo = require('mongodb');
 class Endpoints {
     constructor(router, repository) {
         this.routes = router;
@@ -13,6 +14,19 @@ class Endpoints {
                     })
             })
         });
+
+        this.routes = this.registerRoute((router, repository) => {
+            router.get('/:id', (req, res) => {
+                repository.find({_id: new mongo.ObjectID(req.params.id)})
+                    .then(result => {
+                        res.json(result);
+                    })
+                    .catch(err => {
+                        res.send(err)
+                    })
+            })
+        });
+
         this.routes = this.registerRoute((router, repository) => {
             router.post('/', (req, res) => {
                 let entity = req.body;
@@ -26,16 +40,16 @@ class Endpoints {
                     });
             });
         });
+
         this.routes = this.registerRoute((router, repository) => {
             router.delete('/', (req, res) => {
                 let entity = req.body;
-                repository.delete(entity)
+                repository.remove(entity)
                     .then(() => {
                         res.sendStatus(200)
                     })
-                    .catch((err) => {
-                        console.log(err);
-                        res.sendStatus(409);
+                    .catch(() => {
+                        res.sendStatus(500);
                     });
             });
         });

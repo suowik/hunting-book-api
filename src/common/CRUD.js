@@ -21,7 +21,7 @@ class CRUD {
             })
     }
 
-    delete(entity) {
+    remove(entity) {
         return this.mongo
             .then((db) => {
                 return db.collection(this.props.collection)
@@ -55,15 +55,15 @@ class CRUD {
         return this.mongo
             .then((db) => {
                 return new Promise((resolve, reject) => {
-                    let partial = db.collection(this.props.collection)
+                    let partialQuery = db.collection(this.props.collection)
                         .find();
                     if (pagination) {
                         let page = (pagination.offset / pagination.limit);
-                        partial
+                        partialQuery
                             .skip(page * pagination.limit)
                             .limit(pagination.limit)
                     }
-                    partial.toArray((err, items) => {
+                    partialQuery.toArray((err, items) => {
                         if (err) reject(err);
                         resolve(items)
                     })
