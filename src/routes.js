@@ -8,10 +8,10 @@ let port = process.env.PORT || 3000;
 let auth = require('../src/auth.js');
 let secret = process.env.AUTH_SECRET || 'dupa';
 
-let userEndpoints = require('./users/endpoints.js').userEndpoints;
-let animalEndpoints = require('./animals/endpoints.js').animalEndpoints;
-let huntingEndpoints = require('./huntings/endpoints.js').huntingEndpoints;
-let huntingAreaEndpoints = require('./huntingAreas/endpoints.js').huntingAreaEndpoints;
+let UserEndpoints = require('./users/UserEndpoints.js').UserEndpoints;
+let AnimalEndpoints = require('./animals/AnimalEndpoints.js').AnimalEndpoints;
+let HuntingEndpoints = require('./huntings/HuntingEndpoints.js').HuntingEndpoints;
+let HuntingAreaEndpoints = require('./huntingAreas/HuntingAreasEndpoints.js').HuntingAreaEndpoints;
 
 let protectedRoutes = (router, auth, secret) => {
     if (process.env.ENV === 'prod') {
@@ -29,10 +29,10 @@ let app = (repositories) => {
 
     app.post('/login', auth.loginHandler(secret, repositories.userRepository));
 
-    app.use('/users', userEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.userRepository));
-    app.use('/animals', animalEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.animalRepository));
-    app.use('/huntings', huntingEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingRepository));
-    app.use('/huntingAreas', huntingAreaEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingAreaRepository));
+    app.use('/users', new UserEndpoints(express.Router(), repositories.userRepository).routes);
+    app.use('/animals', new AnimalEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.animalRepository).routes);
+    app.use('/huntings', new HuntingEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingRepository).routes);
+    app.use('/huntingAreas', new HuntingAreaEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingAreaRepository).routes);
 
 
     app.listen(port, () => {

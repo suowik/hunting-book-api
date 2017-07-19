@@ -1,16 +1,16 @@
 let CRUD = require('../common/CRUD.js').CRUD;
 
-class UserRepository extends CRUD {
+class HuntingAreaRepository extends CRUD {
     constructor(mongo) {
         super(mongo, {
-            collection: 'users',
+            collection: 'huntingAreas',
             keyUniqueness: (entity) => {
-                return {login: entity.login}
+                return {name: entity.name}
             }
         })
     }
 }
 
 module.exports = {
-    UserRepository: UserRepository
+    HuntingAreaRepository: HuntingAreaRepository
 };
