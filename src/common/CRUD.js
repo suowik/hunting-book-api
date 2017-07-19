@@ -33,12 +33,16 @@ class CRUD {
     }
 
     exists(criteria) {
-        return this.find(criteria)
-            .then((doc) => {
-                return Promise.resolve(doc)
-            }).catch(err => {
-                return Promise.reject(err)
-            });
+        return this.mongo
+            .then(db => {
+                return new Promise((resolve, reject) => {
+                    db.collection(this.props.collection)
+                        .findOne(criteria, (err, doc) => {
+                            if (err) reject(err);
+                            resolve(doc)
+                        })
+                });
+            })
     }
 
     find(criteria) {
@@ -50,7 +54,6 @@ class CRUD {
                         this.props.lookupQuery(partialQuery).toArray((err, items) => {
                             if (err) reject(err);
                             resolve(items.map(e => this.props.afterFind(e))[0])
-
                         })
                     } else {
                         partialQuery.findOne(criteria, (err, doc) => {

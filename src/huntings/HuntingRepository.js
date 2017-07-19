@@ -6,7 +6,9 @@ class HuntingRepository extends CRUD {
         super(mongo, {
             collection: 'huntings',
             keyUniqueness: (entity) => {
-                return {_id: entity._id}
+                return {
+                    uniqueId: entity.userId + "_" + entity.start
+                }
             },
             beforeInsert: (hunting => {
                 return {
@@ -14,6 +16,7 @@ class HuntingRepository extends CRUD {
                     "status": hunting.status,
                     "start": hunting.start,
                     "end": hunting.end,
+                    "uniqueId": hunting.userId + "_" + hunting.start,
                     "area": new m.ObjectID(hunting.area),
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {"id": new m.ObjectID(a.id), "shots": a.shots, hunted: a.hunted}
@@ -27,6 +30,7 @@ class HuntingRepository extends CRUD {
                     "start": hunting.start,
                     "end": hunting.end,
                     "_id": hunting._id,
+                    "uniqueId": hunting.uniqueId,
                     "area": hunting.area[0],
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {
