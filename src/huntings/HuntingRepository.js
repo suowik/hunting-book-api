@@ -38,7 +38,7 @@ class HuntingRepository extends CRUD {
                             "id": a.id,
                             "shots": a.shots,
                             "hunted": a.hunted,
-                            "name": this.findRelatedAnimal(hunting.animals, a.id)
+                            "name": a.name
                         }
                     })
                 }
@@ -78,7 +78,7 @@ class HuntingRepository extends CRUD {
         return this.mongo
             .then(db => {
                 return new Promise((resolve, reject) => {
-                    let huntings = db.collection(this.props.collection)
+                    let huntings = db.collection(this.props.collection);
                     huntings
                         .findAndModify(
                             {_id: new mDB.ObjectID(finishData._id)},
@@ -99,7 +99,6 @@ class HuntingRepository extends CRUD {
     }
 
     addHuntedAnimals(animalsData) {
-        console.log(animalsData)
         return this.mongo
             .then(db => {
                 return new Promise((resolve, reject) => {
@@ -113,6 +112,7 @@ class HuntingRepository extends CRUD {
                                     huntedAnimals: {
                                         id: new mDB.ObjectID(animalsData.animal._id),
                                         shots: animalsData.animal.shots,
+                                        name: animalsData.animal.name,
                                         hunted: animalsData.animal.hunted
                                     }
                                 }
