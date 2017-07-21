@@ -3,12 +3,23 @@ class HuntingEndpoints extends Endpoints {
     constructor(router, repository) {
         super(router, repository);
         this.routes = this.registerRoute((router, repository) => {
-            router.get('/active/:userId', (req, res) => {
+            router.get('/started/:userId', (req, res) => {
                 repository.findStartedHuntingsOfUser(req.params.userId)
                     .then(huntings => {
                         res.json(huntings)
                     })
-                    .catch(err=>{
+                    .catch(err => {
+                        res.sendStatus(500)
+                    })
+            })
+        })
+        this.routes = this.registerRoute((router, repository) => {
+            router.post('/finish', (req, res) => {
+                repository.finish(req.body)
+                    .then(hunting => {
+                        res.sendStatus(200)
+                    })
+                    .catch(err => {
                         res.sendStatus(500)
                     })
             })
