@@ -92,7 +92,6 @@ class HuntingRepository extends CRUD {
                             {upsert: true},
                             (err, doc) => {
                                 if (err) reject(err);
-                                console.log(doc);
                                 resolve(doc)
                             })
                 })
