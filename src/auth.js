@@ -34,7 +34,8 @@ let loginHandler = (secret, userRepository) => {
                     } else {
                         res.json({
                             success: true,
-                            role: user.role,
+                            roles: [user.role],
+                            userId: user._id,
                             token: jwt.sign(user, secret, {
                                 expiresIn: 60 * 60
                             })

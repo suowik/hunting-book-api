@@ -6,7 +6,13 @@ class UserRepository extends CRUD {
             collection: 'users',
             keyUniqueness: (entity) => {
                 return {login: entity.login}
-            }
+            },
+            beforeInsert: (user => {
+                user.roles= [];
+                user.roles.push('user');
+                return user
+
+            })
         })
     }
 }

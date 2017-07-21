@@ -3,7 +3,7 @@ let bodyParser = require('body-parser');
 let morgan = require('morgan');
 let cors = require('cors');
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 3001;
 
 let auth = require('../src/auth.js');
 let secret = process.env.AUTH_SECRET || 'dupa';
