@@ -98,6 +98,34 @@ class HuntingRepository extends CRUD {
             })
     }
 
+    addHuntedAnimals(animalsData) {
+        console.log(animalsData)
+        return this.mongo
+            .then(db => {
+                return new Promise((resolve, reject) => {
+                    let huntings = db.collection(this.props.collection);
+                    huntings
+                        .findAndModify(
+                            {_id: new mDB.ObjectID(animalsData._id)},
+                            [],
+                            {
+                                $push: {
+                                    huntedAnimals: {
+                                        id: new mDB.ObjectID(animalsData.animal._id),
+                                        shots: animalsData.animal.shots,
+                                        hunted: animalsData.animal.hunted
+                                    }
+                                }
+                            },
+                            {upsert: true},
+                            (err, doc) => {
+                                if (err) reject(err);
+                                resolve(doc)
+                            })
+                })
+            })
+    }
+
     findStartedHuntingsOfUser(userId) {
         let criteria = {
             userId: new mDB.ObjectID(userId),
