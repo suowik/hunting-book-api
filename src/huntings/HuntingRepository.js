@@ -1,5 +1,6 @@
 let CRUD = require('../common/CRUD.js').CRUD;
-let m = require('mongodb');
+let mDB = require('mongodb');
+let moment = require('moment');
 
 class HuntingRepository extends CRUD {
     constructor(mongo) {
@@ -12,14 +13,14 @@ class HuntingRepository extends CRUD {
             },
             beforeInsert: (hunting => {
                 return {
-                    "userId": new m.ObjectID(hunting.userId),
+                    "userId": new mDB.ObjectID(hunting.userId),
                     "status": hunting.status,
                     "start": hunting.start,
                     "end": hunting.end,
                     "uniqueId": hunting.userId + "_" + hunting.start,
-                    "area": new m.ObjectID(hunting.area),
+                    "area": new mDB.ObjectID(hunting.area),
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
-                        return {"id": new m.ObjectID(a.id), "shots": a.shots, hunted: a.hunted}
+                        return {"id": new mDB.ObjectID(a.id), "shots": a.shots, hunted: a.hunted}
                     })
                 }
             }),
@@ -73,9 +74,28 @@ class HuntingRepository extends CRUD {
         })
     }
 
+    findStartedHuntingsOfUser(userId) {
+        let criteria = {
+            userId: new mDB.ObjectID(userId),
+            status: 'started'
+        };
+        return this.mongo
+            .then(db => {
+                return new Promise((resolve, reject) => {
+                    db.collection(this.props.collection)
+                        .find(criteria, [{_id: true}])
+                        .toArray((err, res) => {
+                            if (err) reject(err);
+                            resolve(res)
+                        })
+                })
+            })
+    }
+
     findRelatedAnimal(animals, id) {
         return animals.filter(a => a._id.toString() === id.toString()).map(f => f.name)[0]
     }
+
 }
 
 module.exports = {
