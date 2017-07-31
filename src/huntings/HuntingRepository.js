@@ -18,7 +18,7 @@ class HuntingRepository extends CRUD {
                     "start": hunting.start,
                     "end": hunting.end,
                     "uniqueId": hunting.userId + "_" + hunting.start,
-                    "area": new mDB.ObjectID(hunting.area),
+                    "area": hunting.area,
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {"id": new mDB.ObjectID(a.id), "shots": a.shots, hunted: a.hunted}
                     })

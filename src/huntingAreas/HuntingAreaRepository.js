@@ -5,7 +5,7 @@ class HuntingAreaRepository extends CRUD {
         super(mongo, {
             collection: 'huntingAreas',
             keyUniqueness: (entity) => {
-                return {name: entity.name}
+                return {_id: entity._id}
             }
         })
     }
