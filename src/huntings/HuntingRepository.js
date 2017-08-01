@@ -43,8 +43,9 @@ class HuntingRepository extends CRUD {
                     })
                 }
             }),
-            lookupQuery: (collection) => {
+            lookupQuery: (collection, criteria) => {
                 return collection.aggregate([
+                    {$match: criteria},
                     {
                         "$lookup": {
                             "from": "huntingAreas",

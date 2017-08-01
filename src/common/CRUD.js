@@ -71,7 +71,7 @@ class CRUD {
                 return new Promise((resolve, reject) => {
                     let partialQuery = db.collection(this.props.collection);
                     if (this.props.lookupQuery) {
-                        partialQuery = this.props.lookupQuery(partialQuery)
+                        partialQuery = this.props.lookupQuery(partialQuery, criteria)
                     } else {
                         partialQuery = partialQuery.find(criteria)
                     }
