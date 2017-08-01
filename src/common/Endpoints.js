@@ -5,7 +5,10 @@ class Endpoints {
         this.repository = repository;
         this.routes = this.registerRoute((router, repository) => {
             router.get('/', (req, res) => {
-                repository.findAll({limit: parseInt(req.query.limit) || 100, offset: parseInt(req.query.offset) || 0})
+                repository.findAll({
+                    limit: parseInt(req.query.limit) || 100,
+                    offset: parseInt(req.query.offset) || 0
+                }, req.query)
                     .then(result => {
                         res.json(result);
                     })

@@ -2,7 +2,7 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let morgan = require('morgan');
 let cors = require('cors');
-
+let boolParser = require('express-query-boolean');
 let port = process.env.PORT || 3001;
 
 let auth = require('../src/auth.js');
@@ -24,6 +24,7 @@ let app = (repositories) => {
     let app = express();
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
+    app.use(boolParser());
     app.use(morgan('dev'));
     app.use(cors());
 

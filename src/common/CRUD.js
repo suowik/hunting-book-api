@@ -64,7 +64,8 @@ class CRUD {
             })
     }
 
-    findAll(pagination) {
+    findAll(pagination, criteria) {
+        criteria = criteria || {};
         return this.mongo
             .then((db) => {
                 return new Promise((resolve, reject) => {
@@ -72,7 +73,7 @@ class CRUD {
                     if (this.props.lookupQuery) {
                         partialQuery = this.props.lookupQuery(partialQuery)
                     } else {
-                        partialQuery = partialQuery.find()
+                        partialQuery = partialQuery.find(criteria)
                     }
                     if (pagination) {
                         let page = (pagination.offset / pagination.limit);
