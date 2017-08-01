@@ -1,6 +1,7 @@
 let CRUD = require('../common/CRUD.js').CRUD;
 let mDB = require('mongodb');
 let moment = require('moment');
+let AnimalRepository = require('../animals/AnimalRepository.js').AnimalRepository;
 
 class HuntingRepository extends CRUD {
     constructor(mongo) {
@@ -20,7 +21,7 @@ class HuntingRepository extends CRUD {
                     "uniqueId": hunting.userId + "_" + hunting.start,
                     "area": hunting.area,
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
-                        return {"id": new mDB.ObjectID(a.id), "shots": a.shots, hunted: a.hunted}
+                        return {"_id": a._id, "shots": a.shots, hunted: a.hunted}
                     })
                 }
             }),
@@ -35,7 +36,7 @@ class HuntingRepository extends CRUD {
                     "area": hunting.area[0],
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {
-                            "id": a.id,
+                            "_id": a._id,
                             "shots": a.shots,
                             "hunted": a.hunted,
                             "name": a.name
@@ -52,14 +53,6 @@ class HuntingRepository extends CRUD {
                             "localField": "area",
                             "foreignField": "_id",
                             "as": "area"
-                        }
-                    },
-                    {
-                        "$lookup": {
-                            "from": "animals",
-                            "localField": "huntedAnimals.id",
-                            "foreignField": "_id",
-                            "as": "animals"
                         }
                     },
                     {
@@ -111,7 +104,7 @@ class HuntingRepository extends CRUD {
                             {
                                 $push: {
                                     huntedAnimals: {
-                                        id: new mDB.ObjectID(animalsData.animal._id),
+                                        _id: animalsData.animal._id,
                                         shots: animalsData.animal.shots,
                                         name: animalsData.animal.name,
                                         hunted: animalsData.animal.hunted
@@ -143,10 +136,6 @@ class HuntingRepository extends CRUD {
                         })
                 })
             })
-    }
-
-    findRelatedAnimal(animals, id) {
-        return animals.filter(a => a._id.toString() === id.toString()).map(f => f.name)[0]
     }
 
 }

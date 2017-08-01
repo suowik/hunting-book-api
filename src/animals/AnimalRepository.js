@@ -5,7 +5,7 @@ class AnimalRepository extends CRUD {
         super(mongo, {
             collection: 'animals',
             keyUniqueness: (entity) => {
-                return {name: entity.name}
+                return {_id: entity._id}
             }
         })
     }
