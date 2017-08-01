@@ -8,20 +8,16 @@ class CRUD {
         if (this.props.beforeInsert) {
             entity = this.props.beforeInsert(entity)
         }
-        return this.exists(this.props.keyUniqueness(entity))
-            .then((doc) => {
-                if (!doc) {
-                    return this.mongo
-                        .then((db) => {
-                            return db.collection(this.props.collection)
-                                .insertOne(entity)
-                        });
-                }
-                return Promise.reject(new Error('entity exists'));
-            })
-            .catch((err) => {
-                return Promise.reject(err)
-            })
+        return new Promise((resolve, reject) => {
+            return this.mongo
+                .then((db) => {
+                    return db.collection(this.props.collection)
+                        .findAndModify(this.props.keyUniqueness(entity), [], entity, {upsert: true}, (err, doc) => {
+                            if (err) reject(err);
+                            resolve(doc.value);
+                        })
+                });
+        });
     }
 
     remove(entity) {
