@@ -64,6 +64,12 @@ class HuntingRepository extends CRUD {
                         }
                     }
                 ])
+            },
+            beforeSearch: (criteria) => {
+                if(criteria.userId){
+                    criteria.userId = new mDB.ObjectID(criteria.userId)
+                }
+                return criteria
             }
         })
     }

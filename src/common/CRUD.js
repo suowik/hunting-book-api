@@ -65,7 +65,9 @@ class CRUD {
     }
 
     findAll(pagination, criteria) {
-        criteria = criteria || {};
+        if (this.props.beforeSearch) {
+            criteria = this.props.beforeSearch(criteria || {});
+        }
         return this.mongo
             .then((db) => {
                 return new Promise((resolve, reject) => {
