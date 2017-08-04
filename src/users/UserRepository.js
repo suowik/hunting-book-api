@@ -8,11 +8,13 @@ class UserRepository extends CRUD {
                 return {_id: entity._id}
             },
             beforeInsert: (user => {
-                if(user._id){
+                if (user._id) {
                     user._id = new mDB.ObjectID(user._id)
                 }
-                user.roles= [];
-                user.roles.push('user');
+                if (!user.roles) {
+                    user.roles = [];
+                    user.roles.push('user');
+                }
                 return user
 
             })
