@@ -4,7 +4,7 @@ let moment = require('moment');
 
 function findAndFinishHuntingsJob(huntingRepository) {
     return () => {
-        schedule.scheduleJob("* * * * * *", () => {
+        schedule.scheduleJob("* */10 * * * *", () => {
             let now = moment();
             huntingRepository.findAll(null, {status:'started'})
                 .then((huntings) => {
