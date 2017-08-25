@@ -18,8 +18,8 @@ class HuntingRepository extends CRUD {
                     "status": hunting.status,
                     "start": hunting.start,
                     "end": hunting.end,
+                    "huntingSpot": hunting.huntingSpot,
                     "uniqueId": hunting.userId + "_" + hunting.start,
-                    "area": hunting.area,
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {"_id": a._id, "shots": a.shots, hunted: a.hunted}
                     })
@@ -33,7 +33,6 @@ class HuntingRepository extends CRUD {
                     "end": hunting.end,
                     "_id": hunting._id,
                     "uniqueId": hunting.uniqueId,
-                    "area": hunting.area[0],
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {
                             "_id": a._id,
@@ -47,14 +46,6 @@ class HuntingRepository extends CRUD {
             lookupQuery: (collection, criteria) => {
                 return collection.aggregate([
                     {$match: criteria},
-                    {
-                        "$lookup": {
-                            "from": "huntingAreas",
-                            "localField": "area",
-                            "foreignField": "_id",
-                            "as": "area"
-                        }
-                    },
                     {
                         "$lookup": {
                             "from": "users",
