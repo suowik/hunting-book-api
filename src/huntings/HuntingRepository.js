@@ -32,6 +32,7 @@ class HuntingRepository extends CRUD {
                     "start": hunting.start,
                     "end": hunting.end,
                     "_id": hunting._id,
+                    "huntingSpot": hunting.huntingSpot,
                     "uniqueId": hunting.uniqueId,
                     "huntedAnimals": hunting.huntedAnimals.map(a => {
                         return {
