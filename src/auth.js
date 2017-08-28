@@ -36,6 +36,7 @@ let loginHandler = (secret, userRepository) => {
                             success: true,
                             roles: user.roles,
                             userId: user._id,
+                            active: user.active,
                             token: jwt.sign(user, secret, {
                                 expiresIn: 60 * 60
                             })
