@@ -100,13 +100,8 @@ class HuntingRepository extends CRUD {
                             {_id: new mDB.ObjectID(animalsData._id)},
                             [],
                             {
-                                $push: {
-                                    huntedAnimals: {
-                                        _id: animalsData.animal._id,
-                                        shots: animalsData.animal.shots,
-                                        name: animalsData.animal.name,
-                                        hunted: animalsData.animal.hunted
-                                    }
+                                $set: {
+                                    huntedAnimals: animalsData.animals
                                 }
                             },
                             {upsert: true},
