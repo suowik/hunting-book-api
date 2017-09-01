@@ -4,6 +4,7 @@ let dbURI = process.env.MONGODB_URI || 'mongodb://heroku_p736np9g:68n864jmg3nkjr
 let MongoClient = require('mongodb').MongoClient;
 let connection = MongoClient.connect(dbURI);
 let findAndFinishHuntingsJob = require('./src/schedule/findAndFinishHuntings.js').findAndFinishHuntingsJob;
+let findAndFinishHuntings = require('./src/schedule/findAndFinishHuntings.js').findAndFinishHuntings;
 
 let UserRepository = require('./src/users/UserRepository.js').UserRepository;
 let AnimalRepository = require('./src/animals/AnimalRepository.js').AnimalRepository;
@@ -12,6 +13,7 @@ let HuntingAreasRespository = require('./src/huntingAreas/HuntingAreaRepository.
 
 let huntingRepository = new HuntingRepository(connection);
 
+findAndFinishHuntings(huntingRepository);
 findAndFinishHuntingsJob(huntingRepository)();
 
 let repositories = {
