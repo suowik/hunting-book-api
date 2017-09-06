@@ -3,36 +3,21 @@ class HuntingEndpoints extends Endpoints {
     constructor(router, repository) {
         super(router, repository);
         this.routes = this.registerRoute((router, repository) => {
-            router.get('/started/:userId', (req, res) => {
-                repository.findStartedHuntingsOfUser(req.params.userId)
-                    .then(huntings => {
-                        res.json(huntings)
-                    })
-                    .catch(err => {
-                        res.sendStatus(500)
-                    })
+            router.get('/started/:userId', async (req, res) => {
+                let huntings = await repository.findStartedHuntingsOfUser(req.params.userId);
+                res.json(huntings)
             })
         });
         this.routes = this.registerRoute((router, repository) => {
-            router.post('/finish', (req, res) => {
-                repository.finish(req.body)
-                    .then(hunting => {
-                        res.sendStatus(200)
-                    })
-                    .catch(err => {
-                        res.sendStatus(500)
-                    })
+            router.post('/finish', async (req, res) => {
+                await repository.finish(req.body);
+                res.sendStatus(200)
             })
-        })
+        });
         this.routes = this.registerRoute((router, repository) => {
-            router.post('/animals', (req, res) => {
-                repository.addHuntedAnimals(req.body)
-                    .then(hunting => {
-                        res.sendStatus(200)
-                    })
-                    .catch(err => {
-                        res.sendStatus(500)
-                    })
+            router.post('/animals', async (req, res) => {
+                await repository.addHuntedAnimals(req.body);
+                res.sendStatus(200)
             })
         })
     }

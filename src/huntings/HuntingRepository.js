@@ -44,8 +44,8 @@ class HuntingRepository extends CRUD {
                     })
                 }
             }),
-            lookupQuery: (collection, criteria) => {
-                return collection.aggregate([
+            lookupQuery: async (collection, criteria) => {
+                return await collection.aggregate([
                     {$match: criteria},
                     {
                         "$lookup": {
@@ -58,7 +58,7 @@ class HuntingRepository extends CRUD {
                 ])
             },
             beforeSearch: (criteria) => {
-                if(criteria.userId){
+                if (criteria.userId) {
                     criteria.userId = new mDB.ObjectID(criteria.userId)
                 }
                 return criteria
@@ -66,69 +66,41 @@ class HuntingRepository extends CRUD {
         })
     }
 
-    finish(finishData) {
-        return this.mongo
-            .then(db => {
-                return new Promise((resolve, reject) => {
-                    let huntings = db.collection(this.props.collection);
-                    huntings
-                        .findAndModify(
-                            {_id: new mDB.ObjectID(finishData._id)},
-                            [],
-                            {
-                                $set: {
-                                    'status': 'finished',
-                                    'end': finishData.end
-                                }
-                            },
-                            {upsert: true},
-                            (err, doc) => {
-                                if (err) reject(err);
-                                resolve(doc)
-                            })
-                })
-            })
+    async finish(finishData) {
+        let collection = await super.connect();
+        return await collection.findAndModify(
+            {_id: new mDB.ObjectID(finishData._id)},
+            [],
+            {
+                $set: {
+                    'status': 'finished',
+                    'end': finishData.end
+                }
+            },
+            {upsert: true});
     }
 
-    addHuntedAnimals(animalsData) {
-        return this.mongo
-            .then(db => {
-                return new Promise((resolve, reject) => {
-                    let huntings = db.collection(this.props.collection);
-                    huntings
-                        .findAndModify(
-                            {_id: new mDB.ObjectID(animalsData._id)},
-                            [],
-                            {
-                                $set: {
-                                    huntedAnimals: animalsData.animals
-                                }
-                            },
-                            {upsert: true},
-                            (err, doc) => {
-                                if (err) reject(err);
-                                resolve(doc)
-                            })
-                })
-            })
+    async addHuntedAnimals(animalsData) {
+        let collection = await super.connect();
+        return await collection.findAndModify(
+            {_id: new mDB.ObjectID(animalsData._id)},
+            [],
+            {
+                $set: {
+                    huntedAnimals: animalsData.animals
+                }
+            },
+            {upsert: true});
     }
 
-    findStartedHuntingsOfUser(userId) {
+    async findStartedHuntingsOfUser(userId) {
         let criteria = {
             userId: new mDB.ObjectID(userId),
             status: 'started'
         };
-        return this.mongo
-            .then(db => {
-                return new Promise((resolve, reject) => {
-                    db.collection(this.props.collection)
-                        .find(criteria, [{_id: true}])
-                        .toArray((err, res) => {
-                            if (err) reject(err);
-                            resolve(res)
-                        })
-                })
-            })
+        let collection = await super.connect();
+        let items = await collection.find(criteria, [{_id: true}]);
+        return await items.toArray();
     }
 
 }

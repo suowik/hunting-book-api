@@ -22,31 +22,25 @@ let authorizationFilter = (secret) => {
 };
 
 let loginHandler = (secret, userRepository) => {
-    return (req, res) => {
-        userRepository
-            .find({login: req.body.login})
-            .then((user) => {
-                if (!user) {
-                    res.json({success: false, message: 'Authentication failed. User not found.'});
-                } else if (user) {
-                    if (user.password !== req.body.password) {
-                        res.json({success: false, message: 'Authentication failed. Wrong password.'});
-                    } else {
-                        res.json({
-                            success: true,
-                            roles: user.roles,
-                            userId: user._id,
-                            active: user.active,
-                            token: jwt.sign(user, secret, {
-                                expiresIn: 60 * 60
-                            })
-                        });
-                    }
-                }
-            })
-            .catch((err) => {
-                throw err
-            });
+    return async (req, res) => {
+        let user = await userRepository.find({login: req.body.login});
+        if (!user) {
+            res.json({success: false, message: 'Authentication failed. User not found.'});
+        } else if (user) {
+            if (user.password !== req.body.password) {
+                res.json({success: false, message: 'Authentication failed. Wrong password.'});
+            } else {
+                res.json({
+                    success: true,
+                    roles: user.roles,
+                    userId: user._id,
+                    active: user.active,
+                    token: jwt.sign(user, secret, {
+                        expiresIn: 60 * 60
+                    })
+                });
+            }
+        }
     }
 };
 

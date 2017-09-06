@@ -4,56 +4,35 @@ class Endpoints {
         this.routes = router;
         this.repository = repository;
         this.routes = this.registerRoute((router, repository) => {
-            router.get('/', (req, res) => {
-                repository.findAll({
+            router.get('/', async (req, res) => {
+                let result = await repository.findAll({
                     limit: parseInt(req.query.limit) || 100,
                     offset: parseInt(req.query.offset) || 0
-                }, req.query)
-                    .then(result => {
-                        res.json(result);
-                    })
-                    .catch(err => {
-                        res.send(err)
-                    })
+                }, req.query);
+                res.json(result)
             })
         });
 
         this.routes = this.registerRoute((router, repository) => {
-            router.get('/:id', (req, res) => {
-                repository.find({_id: new mongo.ObjectID(req.params.id)})
-                    .then(result => {
-                        res.json(result);
-                    })
-                    .catch(err => {
-                        res.send(err)
-                    })
+            router.get('/:id', async (req, res) => {
+                let result = await repository.find({_id: new mongo.ObjectID(req.params.id)});
+                res.json(result);
             })
         });
 
         this.routes = this.registerRoute((router, repository) => {
-            router.post('/', (req, res) => {
+            router.post('/', async (req, res) => {
                 let entity = req.body;
-                repository.create(entity)
-                    .then(() => {
-                        res.json(entity)
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        res.sendStatus(409);
-                    });
+                let created = await repository.create(entity);
+                res.json(created);
             });
         });
 
         this.routes = this.registerRoute((router, repository) => {
-            router.delete('/', (req, res) => {
+            router.delete('/', async (req, res) => {
                 let entity = req.body;
-                repository.remove({_id: new mongo.ObjectID(entity._id)})
-                    .then(() => {
-                        res.sendStatus(200)
-                    })
-                    .catch(() => {
-                        res.sendStatus(500);
-                    });
+                await repository.remove({_id: new mongo.ObjectID(entity._id)});
+                res.sendStatus(200)
             });
         });
     }
