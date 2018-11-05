@@ -19,7 +19,7 @@ async function findAndFinishHuntings(huntingRepository) {
 
 function findAndFinishHuntingsJob(huntingRepository) {
     return () => {
-        schedule.scheduleJob("0 * * ? * *", async () => {
+        schedule.scheduleJob("*/5 * * * *", async () => {
             await findAndFinishHuntings(huntingRepository)
         });
     }
