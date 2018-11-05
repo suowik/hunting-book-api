@@ -30,9 +30,12 @@ class UserRepository extends CRUD {
         let criteria = {
             login: login
         };
+        console.log(login)
         let collection = await super.connect();
-        let items = await collection.find(criteria, [{_id: true}]);
-        return await items.toArray().length > 0;
+        let items = await collection.find(criteria, []);
+        let found = await items.toArray();
+        console.log(found.length > 0)
+        return found.length > 0
     }
 
 }
