@@ -13,7 +13,7 @@ let HuntingAreasRespository = require('./src/huntingAreas/HuntingAreaRepository.
 
 let huntingRepository = new HuntingRepository(connection);
 
-findAndFinishHuntings(huntingRepository).then(h => console.log(h));
+findAndFinishHuntings(huntingRepository);
 findAndFinishHuntingsJob(huntingRepository)();
 
 let repositories = {
