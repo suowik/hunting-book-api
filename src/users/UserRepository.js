@@ -25,6 +25,16 @@ class UserRepository extends CRUD {
             }
         })
     }
+
+    async userExists(login) {
+        let criteria = {
+            login: login
+        };
+        let collection = await super.connect();
+        let items = await collection.find(criteria, [{_id: true}]);
+        return await items.toArray().length > 0;
+    }
+
 }
 
 module.exports = {
