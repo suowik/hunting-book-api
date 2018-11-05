@@ -13,6 +13,9 @@ class UserRepository extends CRUD {
                 if (user._id != null) {
                     user._id = new mDB.ObjectID(user._id)
                 }
+                if(user._id === null){
+                    user._id = new mDB.ObjectID()
+                }
                 if (!user.roles) {
                     user.roles = [];
                     user.roles.push('user');
