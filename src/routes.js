@@ -12,6 +12,7 @@ let UserEndpoints = require('./users/UserEndpoints.js').UserEndpoints;
 let AnimalEndpoints = require('./animals/AnimalEndpoints.js').AnimalEndpoints;
 let HuntingEndpoints = require('./huntings/HuntingEndpoints.js').HuntingEndpoints;
 let HuntingAreaEndpoints = require('./huntingAreas/HuntingAreasEndpoints.js').HuntingAreaEndpoints;
+let AnnouncementEndpoints = require('./announcements/AnnouncementEndpoints.js').AnnouncementEndpoints;
 
 let protectedRoutes = (router, auth, secret) => {
     if (process.env.ENV === 'prod') {
@@ -31,6 +32,7 @@ let app = (repositories) => {
     app.post('/login', auth.loginHandler(secret, repositories.userRepository));
 
     app.use('/users', new UserEndpoints(express.Router(), repositories.userRepository).routes);
+    app.use('/announcements', new AnnouncementEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.announcementRepository).routes);
     app.use('/animals', new AnimalEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.animalRepository).routes);
     app.use('/huntings', new HuntingEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingRepository).routes);
     app.use('/huntingAreas', new HuntingAreaEndpoints(protectedRoutes(express.Router(), auth, secret), repositories.huntingAreaRepository).routes);

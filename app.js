@@ -9,6 +9,7 @@ let findAndFinishHuntings = require('./src/schedule/findAndFinishHuntings.js').f
 let UserRepository = require('./src/users/UserRepository.js').UserRepository;
 let AnimalRepository = require('./src/animals/AnimalRepository.js').AnimalRepository;
 let HuntingRepository = require('./src/huntings/HuntingRepository.js').HuntingRepository;
+let AnnouncementRepository = require('./src/announcements/AnnouncementRepository.js').AnnouncementRepository;
 let HuntingAreasRespository = require('./src/huntingAreas/HuntingAreaRepository.js').HuntingAreaRepository;
 
 let huntingRepository = new HuntingRepository(connection);
@@ -19,6 +20,7 @@ findAndFinishHuntingsJob(huntingRepository)();
 let repositories = {
     userRepository: new UserRepository(connection),
     animalRepository: new AnimalRepository(connection),
+    announcementRepository: new AnnouncementRepository(connection),
     huntingRepository: huntingRepository,
     huntingAreaRepository: new HuntingAreasRespository(connection)
 };

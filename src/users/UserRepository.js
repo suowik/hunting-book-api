@@ -20,7 +20,6 @@ class UserRepository extends CRUD {
                     user.roles = [];
                     user.roles.push('user');
                 }
-                console.log(user)
                 return user
             }
         })
@@ -34,7 +33,6 @@ class UserRepository extends CRUD {
         let collection = await super.connect();
         let items = await collection.find(criteria, []);
         let found = await items.toArray();
-        console.log(found.length > 0)
         return found.length > 0
     }
 
